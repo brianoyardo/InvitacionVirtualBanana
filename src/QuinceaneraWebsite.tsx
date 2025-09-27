@@ -48,38 +48,6 @@ const QuinceaneraWebsite = () => {
       ease: "sine.inOut"
     })
 
-    // Movimiento 3D con mouse
-      const handleMouseMove = (e: MouseEvent) => {
-        const { innerWidth, innerHeight } = window;
-        const offsetX = (e.clientX / innerWidth - 0.5) * 40;
-        const offsetY = (e.clientY / innerHeight - 0.5) * 40;
-
-      gsap.to(container.children, {
-        x: (_, i) => offsetX * (i % 5) * 0.2,
-        y: (_, i) => offsetY * (i % 5) * 0.2,
-        duration: 0.6,
-        ease: "sine.out"
-      });
-    }
-
-    // Movimiento 3D con scroll en móvil
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      gsap.to(container.children, {
-        y: (_, i) => (scrollY / 10) * (i % 3),
-        duration: 0.6,
-        ease: "sine.out"
-      });
-    }
-
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("scroll", handleScroll);
-
-      return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
-    }
-
   }, []);
 
   // -------------------- Contador regresivo --------------------
@@ -142,17 +110,16 @@ const QuinceaneraWebsite = () => {
         ))}
       </div>
 
-      {/* Mariposas animadas */}
-      <div ref={butterfliesRef} className="absolute inset-0 pointer-events-none">
-        {[...Array(50)].map((_, i) => {
-          const size = 30 + Math.random() * 40; // tamaño px
+      {/* Mariposas detrás */}
+      <div ref={butterfliesRef} className="absolute inset-0 pointer-events-none z-0">
+        {[...Array(15)].map((_, i) => {
+          const size = 30 + Math.random() * 40;
           const left = Math.random() * 90 + 5;
           const top = Math.random() * 80 + 10;
-          const hue = Math.floor(Math.random() * 360); // color aleatorio
-        
+          const hue = Math.floor(Math.random() * 360);
           return (
             <img
-              key={i}
+              key={`back-${i}`}
               src={mariposaImg}
               alt="Mariposa"
               className="butterfly absolute"
@@ -167,6 +134,32 @@ const QuinceaneraWebsite = () => {
           );
         })}
       </div>
+      
+      {/* Mariposas delante */}
+      <div className="absolute inset-0 pointer-events-none z-50">
+        {[...Array(20)].map((_, i) => {
+          const size = 30 + Math.random() * 40;
+          const left = Math.random() * 90 + 5;
+          const top = Math.random() * 80 + 10;
+          const hue = Math.floor(Math.random() * 360);
+          return (
+            <img
+              key={`front-${i}`}
+              src={mariposaImg}
+              alt="Mariposa"
+              className="butterfly absolute"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${left}%`,
+                top: `${top}%`,
+                filter: `drop-shadow(0 0 8px hsl(${hue}, 90%, 75%)) hue-rotate(${hue}deg)`
+              }}
+            />
+          );
+        })}
+      </div>
+
 
 
       {/* Botón de música */}
