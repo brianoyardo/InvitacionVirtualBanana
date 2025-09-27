@@ -97,7 +97,7 @@ const QuinceaneraWebsite = () => {
     <div className="min-h-screen bg-gradient-to-br from-pink-900 via-black to-black text-white overflow-hidden relative">
       {/* Partículas brillantes */}
       <div ref={sparklesRef} className="absolute inset-0 pointer-events-none">
-        {[...Array(600)].map((_, i) => (
+        {[...Array(400)].map((_, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-white rounded-full opacity-40"
