@@ -259,8 +259,8 @@ const QuinceaneraWebsite = () => {
           </h2>
           
           <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-pink-500/30 p-6 mb-8">
-            <p className="text-lg text-pink-200 mb-4">Salón "CASA JARDIN DE EVENTOS"</p>
-            <p className="text-white mb-6">Alto Achumani, Urb. HUayllani calle#1 N°1 "Puente Huayllani"</p>
+            <p className="text-lg text-pink-200 mb-4">"CASA JARDIN DE EVENTOS"</p>
+            <p className="text-white mb-6">Alto Achumani, Urb. Huayllani calle#1 N°1 "Puente Huayllani"</p>
             
             {/* Espacio para Google Maps */}
             <div className="aspect-video bg-gradient-to-br from-pink-900/50 to-black/50 rounded-lg overflow-hidden border border-pink-500/30 mb-6">
