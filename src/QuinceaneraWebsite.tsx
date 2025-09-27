@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { MapPin, Clock, Calendar, Heart, Crown, Music, Send } from 'lucide-react';
 import banabaImage from './banaba1.png';
+import mariposaImg from './mariposaSF.png';
+import piggibackSong from './piggiback.mp3';
+
 
 declare global {
   interface Window {
@@ -18,7 +21,7 @@ const QuinceaneraWebsite = () => {
   const [seconds, setSeconds] = useState(0);
   
   // Música
-  const playerRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   
   // RSVP
@@ -26,49 +29,57 @@ const QuinceaneraWebsite = () => {
   
   // Animaciones
   const butterfliesRef = useRef<HTMLDivElement>(null);
-  const sparklesRef = useRef<HTMLDivElement>(null);
+  const sparklesRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   
   const eventDate = new Date('2025-10-11T16:00:00'); // Fecha del evento
 
   // -------------------- Animaciones --------------------
   useEffect(() => {
-    // Mariposas
-    if (butterfliesRef.current) {
-      const butterflies = butterfliesRef.current.children;
-      gsap.to(butterflies, {
-        y: (i) => i % 2 === 0 ? -20 : 20,
-        x: (i) => i % 2 === 0 ? 15 : -15,
-        rotation: (i) => i % 2 === 0 ? 5 : -5,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        stagger: 0.5
+    const container = butterfliesRef.current;
+    if (!container) return;
+
+    // Animación de aleteo
+    gsap.to(".butterfly", {
+      scaleY: 0.8,
+      duration: 0.4,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut"
+    })
+
+    // Movimiento 3D con mouse
+      const handleMouseMove = (e: MouseEvent) => {
+        const { innerWidth, innerHeight } = window;
+        const offsetX = (e.clientX / innerWidth - 0.5) * 40;
+        const offsetY = (e.clientY / innerHeight - 0.5) * 40;
+
+      gsap.to(container.children, {
+        x: (_, i) => offsetX * (i % 5) * 0.2,
+        y: (_, i) => offsetY * (i % 5) * 0.2,
+        duration: 0.6,
+        ease: "sine.out"
       });
     }
 
-    // Brillos
-    if (sparklesRef.current) {
-      const sparkles = sparklesRef.current.children;
-      gsap.to(sparkles, {
-        opacity: 0.8,
-        scale: 1.2,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-        stagger: 0.2
+    // Movimiento 3D con scroll en móvil
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      gsap.to(container.children, {
+        y: (_, i) => (scrollY / 10) * (i % 3),
+        duration: 0.6,
+        ease: "sine.out"
       });
     }
 
-    // Título
-    if (titleRef.current) {
-      gsap.fromTo(titleRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1.5, ease: "back.out(1.7)" }
-      );
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("scroll", handleScroll);
+
+      return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
     }
+
   }, []);
 
   // -------------------- Contador regresivo --------------------
@@ -95,39 +106,18 @@ const QuinceaneraWebsite = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // -------------------- Música YouTube --------------------
-  useEffect(() => {
-    if (!window.YT) {
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-    }
-
-    window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player('musicIframe', {
-        events: {
-          onReady: (event: any) => {
-            // Lista para reproducir
-          },
-        },
-      });
-    };
-  }, []);
+  // -------------------- Música --------------------
+  audioRef.current = new Audio(piggibackSong);
+  audioRef.current.loop = true;
 
   const toggleMusic = () => {
-    if (!playerRef.current) return;
-
-    const player = playerRef.current;
-    const state = player.getPlayerState();
-
-    if (state === window.YT.PlayerState.PLAYING) {
-      player.pauseVideo();
-      setIsMusicPlaying(false);
+    if (!audioRef.current) return;
+    if (isMusicPlaying) {
+      audioRef.current.pause();
     } else {
-      player.playVideo();
-      setIsMusicPlaying(true);
+      audioRef.current.play();
     }
+    setIsMusicPlaying(!isMusicPlaying);
   };
 
   const handleRsvpSubmit = (e: React.FormEvent) => {
@@ -139,7 +129,7 @@ const QuinceaneraWebsite = () => {
     <div className="min-h-screen bg-gradient-to-br from-pink-900 via-black to-black text-white overflow-hidden relative">
       {/* Partículas brillantes */}
       <div ref={sparklesRef} className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(600)].map((_, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-white rounded-full opacity-40"
@@ -154,34 +144,30 @@ const QuinceaneraWebsite = () => {
 
       {/* Mariposas animadas */}
       <div ref={butterfliesRef} className="absolute inset-0 pointer-events-none">
-        {[...Array(30)].map((_, i) => {
-          const size = 4 + Math.random() * 2; // tamaño aleatorio entre 6 y 12
-          const left = Math.random() * 90 + 5; // entre 5% y 95%
-          const top = Math.random() * 80 + 10; // entre 10% y 90%
-          const rotation = (Math.random() - 0.5) * 30; // rotación aleatoria ±15°
+        {[...Array(50)].map((_, i) => {
+          const size = 30 + Math.random() * 40; // tamaño px
+          const left = Math.random() * 90 + 5;
+          const top = Math.random() * 80 + 10;
+          const hue = Math.floor(Math.random() * 360); // color aleatorio
+        
           return (
-            <svg
+            <img
               key={i}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 64 64"
-              className="absolute text-pink-300/70"
+              src={mariposaImg}
+              alt="Mariposa"
+              className="butterfly absolute"
               style={{
-                width: `${size}rem`,
-                height: `${size}rem`,
+                width: `${size}px`,
+                height: `${size}px`,
                 left: `${left}%`,
                 top: `${top}%`,
-                transform: `rotate(${rotation}deg)`,
-                filter: "drop-shadow(0 0 6px rgba(255, 105, 180, 0.8))",
+                filter: `drop-shadow(0 0 6px hsl(${hue}, 80%, 70%)) hue-rotate(${hue}deg)`
               }}
-            >
-              <path
-                d="M32 32c8-8 16-24 28-16s-8 20-12 24c-4 4-12 8-16 8s-12-4-16-8c-4-4-20-12-12-24s20 8 28 16z"
-                fill="pink"
-              />
-            </svg>
+            />
           );
         })}
       </div>
+
 
       {/* Botón de música */}
       <button
@@ -197,7 +183,7 @@ const QuinceaneraWebsite = () => {
         <div className="text-center mb-12 relative z-10">
           <div className="mb-8">
             <Crown className="w-16 h-16 mx-auto text-pink-300 mb-4 filter drop-shadow-[0_0_10px_rgba(255,105,180,0.7)]" />
-            <h1 ref={titleRef} className="text-5xl font-dancing-script text-pink-300">Mis Quince Años</h1>
+            <h1 ref={titleRef} className="text-6xl font-dancing-script text-pink-300">Mis Quince Años</h1>
           </div>
           <div className="relative w-96 h-[30rem] mx-auto mb-12 group">
             <img
@@ -206,7 +192,7 @@ const QuinceaneraWebsite = () => {
               className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(255,105,180,0.8)]"
             />
           </div>
-          <p className="font-great-vibes text-white text-3xl md:text-4xl">
+          <p className="font-great-vibes text-white text-5xl md:text-5xl">
             Una celebración llena de magia y sueños
           </p>
           <div className="animate-bounce">
