@@ -4,6 +4,7 @@ import { MapPin, Clock, Calendar, Heart, Crown, Music, Send } from 'lucide-react
 import banabaImage from './banaba1.png';
 import mariposaImg from './mariposaSF2.svg';
 import piggibackSong from './piggiback.mp3';
+import { Home, Camera, UtensilsCrossed, Cake, SlidersVertical, Drama } from "lucide-react";
 
 
 declare global {
@@ -40,14 +41,18 @@ const QuinceaneraWebsite = () => {
     if (!container) return;
 
     // Animación de aleteo
-    gsap.to(".butterfly", {
-      scaleY: 0.8,
-      duration: 0.4,
-      yoyo: true,
-      repeat: -1,
-      ease: "sine.inOut"
-    })
-
+    gsap.utils.toArray(".butterfly").forEach((el: any) => {
+      gsap.to(el, {
+        rotation: gsap.utils.random(-8, 8),      // oscila un poco
+        scaleY: gsap.utils.random(0.8, 1),       // aplasta un poco para simular aleteo
+        transformOrigin: "center center",
+        duration: gsap.utils.random(0.2, 0.5),   // cada una a distinto ritmo
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut",
+        delay: gsap.utils.random(0, 1)           // comienzan en momentos diferentes
+      });
+    });
   }, []);
 
   // -------------------- Contador regresivo --------------------
@@ -208,7 +213,7 @@ const QuinceaneraWebsite = () => {
           
           <div className="text-center relative z-10">
             <h2 className="text-3xl md:text-4xl font-dancing-script text-pink-300 mb-6 filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
-              Estás Invitado
+              Entre alas de colores y Petalos al viento, Te invito.
             </h2>
             <p className="text-xl text-pink-200 mb-2">Para celebrar los 15 años de</p>
             <p className="text-3xl md:text-4xl font-bold text-white mb-8 font-great-vibes">Giannina Cesia Oyardo Poma</p>
@@ -291,6 +296,70 @@ const QuinceaneraWebsite = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sección de Programa */}
+      <section className="py-20 px-4 relative">
+        <div className="max-w-4xl mx-auto relative bg-gradient-to-br from-pink-900/40 via-black/50 to-pink-900/40 backdrop-blur-md rounded-[3rem] border-4 border-pink-500/40 shadow-[0_0_25px_rgba(255,105,180,0.5)] p-8 md:p-16 overflow-hidden">
+
+          {/* Lazo decorativo */}
+          <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-20">
+            <div className="w-40 h-40 bg-pink-500 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,105,180,1)] border-4 border-pink-300">
+              <span className="text-6xl">🎀</span>
+            </div>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-dancing-script text-center text-pink-300 mb-16 drop-shadow-[0_0_12px_rgba(255,105,180,0.8)]">
+            Programa de la Noche
+          </h2>
+
+          <div className="relative">
+            {/* Línea central luminosa */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-2 bg-gradient-to-b from-pink-300 via-pink-500 to-pink-300 animate-pulseGlow transform -translate-x-1/2"></div>
+
+            {/* Eventos */}
+            <div className="space-y-16 relative z-10">
+              {[
+                { time: "17:00 pm", title: "Recepción", icon: Home },
+                { time: "20:00 pm", title: "Sesión de fotos", icon: Camera },
+                { time: "21:00 pm", title: "Vals de la quinceañera", icon: Crown },
+                { time: "21:30 pm", title: "Discursos y Palabras Alucivas por Familiares y Amigos", icon: Drama },
+                { time: "22:00 pm", title: "A Sacudir el cuerpo", icon: SlidersVertical },
+                { time: "23:00 pm", title: "A comer el Pastel", icon: Cake }
+              ].map((event, index) => {
+                const Icon = event.icon;
+                const isLeft = index % 2 === 0;
+                return (
+                  <div
+                    key={index}
+                    className={`flex w-full ${isLeft ? "justify-start" : "justify-end"}`}
+                  >
+                    <div className={`relative w-5/12 group`}>
+                      {/* Glow decorativo */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-pink-700/60 to-pink-500/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition duration-500"></div>
+
+                      {/* Tarjeta */}
+                      <div className="relative bg-black/60 border border-pink-400/40 rounded-2xl p-6 shadow-lg text-center transform transition duration-500 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(255,105,180,0.6)]">
+                        {/* Icono circular */}
+                        <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center shadow-[0_0_15px_rgba(255,105,180,0.8)] mb-4">
+                          <Icon className="w-8 h-8 text-white" />
+                        </div>
+                        <p className="text-lg font-bold text-pink-200">{event.time}</p>
+                        <p className="text-xl text-white font-great-vibes">{event.title}</p>
+                      </div>
+                
+                      {/* Punto de conexión */}
+                      <div
+                        className={`absolute top-1/2 transform -translate-y-1/2 ${
+                          isLeft ? "right-[-1.2rem]" : "left-[-1.2rem]"
+                        } w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-4 border-black shadow-[0_0_12px_rgba(255,105,180,0.9)]`}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
