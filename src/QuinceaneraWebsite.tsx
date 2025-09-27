@@ -41,18 +41,13 @@ const QuinceaneraWebsite = () => {
     if (!container) return;
 
     // Animación de aleteo
-    gsap.utils.toArray(".butterfly").forEach((el: any) => {
-      gsap.to(el, {
-        rotation: gsap.utils.random(-8, 8),      // oscila un poco
-        scaleY: gsap.utils.random(0.8, 1),       // aplasta un poco para simular aleteo
-        transformOrigin: "center center",
-        duration: gsap.utils.random(0.2, 0.5),   // cada una a distinto ritmo
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut",
-        delay: gsap.utils.random(0, 1)           // comienzan en momentos diferentes
-      });
-    });
+    gsap.to(".butterfly", {
+      scaleY: 0.8,
+      duration: 0.4,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut"
+    })
   }, []);
 
   // -------------------- Contador regresivo --------------------
@@ -202,7 +197,7 @@ const QuinceaneraWebsite = () => {
       </section>
       
       {/* Sección de Invitación */}
-      <section className="py-20 px-4 relative">
+      <section className=" px-4 relative">
         <div className="max-w-4xl mx-auto bg-black/40 backdrop-blur-md rounded-3xl border border-pink-500/30 p-8 md:p-12 relative overflow-hidden">
           <div className="absolute -top-4 -right-4 w-24 h-24">
             <Heart className="w-full h-full text-pink-500/20" />
@@ -236,9 +231,9 @@ const QuinceaneraWebsite = () => {
       </section>
       
       {/* Sección de Ubicación */}
-      <section className="py-20 px-4 relative">
+      <section className="py-10 px-4 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-dancing-script text-pink-300 mb-12 filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
+          <h2 className="text-6xl md:text-4xl font-dancing-script text-pink-300 mb-12 filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
             Ubicación
           </h2>
           
@@ -271,9 +266,9 @@ const QuinceaneraWebsite = () => {
       </section>
       
       {/* Sección de Cuenta Regresiva */}
-      <section className="py-20 px-4 relative">
+      <section className="py-10 px-4 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-dancing-script text-pink-300 mb-12 filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
+          <h2 className="text-6xl md:text-4xl font-dancing-script text-pink-300 mb-12 filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
             Cuenta Regresiva
           </h2>
           
@@ -301,12 +296,12 @@ const QuinceaneraWebsite = () => {
       </section>
 
       {/* Sección de Programa */}
-      <section className="py-20 px-4 relative">
+      <section className="px-4 relative">
         <div className="max-w-4xl mx-auto relative bg-gradient-to-br from-pink-900/40 via-black/50 to-pink-900/40 backdrop-blur-md rounded-[3rem] border-4 border-pink-500/40 shadow-[0_0_25px_rgba(255,105,180,0.5)] p-8 md:p-16 overflow-hidden">
 
           {/* Lazo decorativo */}
-          <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="w-40 h-40 bg-pink-500 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,105,180,1)] border-4 border-pink-300">
+          <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+            <div className="w-24 h-24 bg-pink-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,105,180,0.8)]">
               <span className="text-6xl">🎀</span>
             </div>
           </div>
@@ -365,7 +360,7 @@ const QuinceaneraWebsite = () => {
       </section>
       
       {/* Sección de Confirmación (RSVP) */}
-      <section className="py-20 px-4 relative">
+      <section className="px-4 relative">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-dancing-script text-pink-300 mb-12 text-center filter drop-shadow-[0_0_8px_rgba(255,105,180,0.6)]">
             Confirma Tu Asistencia
